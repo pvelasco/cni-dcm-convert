@@ -29,7 +29,7 @@ RUN pip install \
     git+https://github.com/nipy/nibabel.git@3bc31e9a6191fc54667b3387ed5dfaced46bf755 \
     git+https://github.com/moloney/dcmstack.git@6d49fe01235c08ae63c76fa2f3943b49c9b9832d
 
-RUN pip install git+https://github.com/vistalab/scitran-data.git@6723602ce74199e4ff8f098cc16f759559bb85a7
+RUN pip install git+https://github.com/vistalab/scitran-data.git@bad266cbf7d284738bb8f426c7ca8ecc9de50bb5
 
 # Make directory for flywheel spec (v0)
 ENV FLYWHEEL /flywheel/v0
