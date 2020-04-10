@@ -97,6 +97,8 @@ def dicom_convert(fp, classification, modality, outbase):
         if convert_nifti:
             log.info(' Performing NIfTI conversion...')
             final_results += scidata.write(ds, ds.data, outbase=outbase, filetype='nifti')  # no reorder
+        else:
+            log.warning(' NIfTI files will not be generated - convert_nifti=False!')
 
     elif ds.scan_type == 'screenshot':
         if convert_png:
