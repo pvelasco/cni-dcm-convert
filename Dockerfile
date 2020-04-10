@@ -37,7 +37,7 @@ RUN mkdir -p ${FLYWHEEL}
 
 # Put the code in place
 COPY manifest.json ${FLYWHEEL}/
-COPY run.py ${FLYWHEEL}/run
+COPY run ${FLYWHEEL}/run
 RUN chmod +x ${FLYWHEEL}/run
 
 # Set the entrypoint
