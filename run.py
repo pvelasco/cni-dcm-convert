@@ -110,6 +110,7 @@ def dicom_convert(fp, classification, modality, outbase):
     # METADATA
     output_files = os.listdir(os.path.dirname(outbase))
     files = []
+    metadata = {}
     if len(output_files) > 0:
         for f in output_files:
 
@@ -145,7 +146,6 @@ def dicom_convert(fp, classification, modality, outbase):
 
             files.append(fdict)
 
-        metadata = {}
         metadata['acquisition'] = {}
         metadata['acquisition']['files'] = files
 
@@ -253,5 +253,5 @@ if __name__ == '__main__':
         log.info(' generated %s' % ', '.join(results))
         os.sys.exit(0)
     else:
-        log.info(' Failed!')
-        os.sys.exit(1)
+        log.info(' No results were generted - check your config!')
+        os.sys.exit(0)
