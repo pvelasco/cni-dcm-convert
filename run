@@ -1,9 +1,17 @@
 #!/usr/bin/env python
 
 import os
-import json
 import logging
 import datetime
+import dicom
+import tempfile
+import shutil
+import zipfile
+import json
+import glob
+import subprocess
+import shlex
+import pprint
 import scitran.data as scidata
 
 logging.basicConfig()
@@ -11,13 +19,41 @@ log = logging.getLogger(' [ stanfordcni/cni-dcm-convert ] ')
 log.setLevel(getattr(logging, 'DEBUG'))
 
 
+def _get_bids_info(dicom_archive):
+    """
+    Use dcm2niix to generate info for a given dicom archive <dicom_archive>
+    """
+
+    bids_info = {}
+
+    if zipfile.is_zipfile(dicom_archive):
+        extract_dir = tempfile.mkdtemp()
+        dcm2niix_dir = tempfile.mkdtemp()
+        with zipfile.ZipFile(dicom_archive, 'r') as zf:
+            zf = zipfile.ZipFile(dicom_archive)
+            zf.extractall(extract_dir)
+            cmd = '/usr/bin/dcm2niix -b o -ba y -o %s %s' % (dcm2niix_dir, extract_dir)
+            log.debug('Running %s' % cmd)
+            subprocess.check_call(shlex.split(cmd))
+            json_file = glob.glob(dcm2niix_dir + "/*.json")
+            if len(json_file) > 1:
+                log.warning("More than one bids_sidecar was produced by dcm2niix. Ambiguous which to use, thus no "
+                            "bids-info will be generated.")
+                return bids_info
+            if json_file:
+                log.info('Generating BIDS info...')
+                with open(json_file[0], 'r') as jfile:
+                    bids_info = json.load(jfile)
+            shutil.rmtree(dcm2niix_dir)
+            shutil.rmtree(extract_dir)
+
+    return bids_info
+
+
 def _get_dicom_info_from_dicom(zip_file_path):
     """
     Extract the last file in the zip to /tmp/ and parse it
     """
-    import zipfile
-    import dicom
-    import os
 
     dcm = []
     if zipfile.is_zipfile(zip_file_path):
@@ -50,6 +86,7 @@ def _get_dicom_info_from_dicom(zip_file_path):
 
     return dcm
 
+
 def dicom_convert(fp, classification, modality, outbase):
     """
     Attempts multiple types of conversion on dicom files.
@@ -58,7 +95,7 @@ def dicom_convert(fp, classification, modality, outbase):
     Also attempts to create montages of all files.
 
     """
-    import pprint
+
     # CONFIG: If there is a config file then load that, else load the manifest and read the default values.
     if os.path.exists('/flywheel/v0/config.json'):
         config_file = '/flywheel/v0/config.json'
@@ -81,7 +118,6 @@ def dicom_convert(fp, classification, modality, outbase):
         convert_montage = config['convert_montage']
         convert_nifti = config['convert_nifti']
         convert_png = config['convert_png']
-
 
     # CONVERSION
     log.info(' Converting dicom file %s...' % fp)
@@ -108,8 +144,11 @@ def dicom_convert(fp, classification, modality, outbase):
             log.warning(' Screenshot acquisition detected, but convert_png=False. Nothing to do! Exiting(0)')
             os.sys.exit(0)
 
-
     # METADATA
+    try:
+        bids_info = _get_bids_info(fp)
+    except:
+        log.warning("Could not generate bids info.")
     output_files = os.listdir(os.path.dirname(outbase))
     files = []
     metadata = {}
@@ -146,12 +185,15 @@ def dicom_convert(fp, classification, modality, outbase):
                 log.info(' No modality was passed in! Assuming MR.')
                 fdict['modality'] = 'MR'
 
+            if bids_info and ftype in ['nifti', 'bval', 'bvec']:
+                fdict['info'] = bids_info
+
             files.append(fdict)
 
         metadata['acquisition'] = {}
         metadata['acquisition']['files'] = files
 
-        with open(os.path.join(os.path.dirname(outbase),'.metadata.json'), 'w') as metafile:
+        with open(os.path.join(os.path.dirname(outbase), '.metadata.json'), 'w') as metafile:
             json.dump(metadata, metafile)
 
     if metadata:
@@ -159,6 +201,7 @@ def dicom_convert(fp, classification, modality, outbase):
         pprint.pprint(metadata)
 
     return final_results
+
 
 if __name__ == '__main__':
     """
@@ -250,10 +293,10 @@ if __name__ == '__main__':
 
     log.info(' Job stop: %s' % datetime.datetime.utcnow())
 
-    # Check for resutls
+    # Check for results
     if results:
         log.info(' generated %s' % ', '.join(results))
         os.sys.exit(0)
     else:
-        log.info(' No results were generted - check your config!')
+        log.info(' No results were generated - check your config!')
         os.sys.exit(0)
