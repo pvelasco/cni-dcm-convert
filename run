@@ -108,7 +108,7 @@ def dicom_convert(fp, classification, modality, outbase):
     with open(config_file, 'r') as jsonfile:
         config = json.load(jsonfile)
     config = config.pop('config')
-    pprint.pprint(config)
+    log.info(pprint.pformat(config))
 
     if MANIFEST:
         convert_montage = config['convert_montage']['default']
@@ -198,7 +198,7 @@ def dicom_convert(fp, classification, modality, outbase):
 
     if metadata:
         log.debug(' Metadata output:')
-        pprint.pprint(metadata)
+        log.info(pprint.pformat(metadata))
 
     return final_results
 
