@@ -8,20 +8,20 @@
   "source": "https://github.com/cni/cni-dcm-convert",
   "license": "Apache-2.0",
   "flywheel": "0",
-  "version": "2.4.0",
+  "version": "2.5.0",
   "custom": {
     "flywheel": {
       "suite": "Stanford CNI"
     },
     "gear-builder": {
       "category": "converter",
-      "image": "stanfordcni/cni-dcm-convert:2.4.0"
+      "image": "stanfordcni/cni-dcm-convert:2.5.0"
     }
   },
   "config": {
     "convert_montage": {
-      "description": "Convert DICOM archive to MONTAGE format. (Default=true)",
-      "default": true,
+      "description": "Convert DICOM archive to MONTAGE format. (Default=false)",
+      "default": false,
       "type": "boolean"
     },
     "convert_nifti": {
@@ -40,7 +40,7 @@
       "type": "boolean"
     },
     "output_name": {
-      "description": "Name to be used for the output NIfTI file. OPTIONAL: By default the gear will use <Study_ID>_<Series_Num>_<Acq_num>.nii.gz.",
+      "description": "Name to be used for the output NIfTI file. OPTIONAL: By default the gear will use <Study_ID>_<Series_Num>_<Acq_Num>.nii.gz.",
       "type": "string",
       "optional": true
     }

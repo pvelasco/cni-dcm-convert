@@ -108,7 +108,7 @@ def dicom_convert(fp, classification, modality, outbase):
     with open(config_file, 'r') as jsonfile:
         config = json.load(jsonfile)
     config = config.pop('config')
-    pprint.pprint(config)
+    log.info(pprint.pformat(config))
 
     if MANIFEST:
         convert_montage = config['convert_montage']['default']
@@ -145,18 +145,18 @@ def dicom_convert(fp, classification, modality, outbase):
             os.sys.exit(0)
 
     # METADATA
+    bids_info = dict()
     try:
         bids_info = _get_bids_info(fp)
     except:
         log.warning("Could not generate bids info.")
     output_files = os.listdir(os.path.dirname(outbase))
-    files = []
-    metadata = {}
+    files = list()
+    metadata = dict()
     if len(output_files) > 0:
         for f in output_files:
 
-            fdict = {}
-            fdict['name'] = f
+            fdict = {'name': f}
 
             # Set filetype
             if f.endswith('.nii.gz'):
@@ -198,7 +198,7 @@ def dicom_convert(fp, classification, modality, outbase):
 
     if metadata:
         log.debug(' Metadata output:')
-        pprint.pprint(metadata)
+        log.info(pprint.pformat(metadata))
 
     return final_results
 
