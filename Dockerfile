@@ -34,7 +34,7 @@ RUN pip install \
 RUN pip install git+https://github.com/vistalab/scitran-data.git@0ebebcb2f91c9292eb7249425dcaedce50f23804
 
 # Install tagged version of dcm2niix
-ENV TAG=v1.0.20200331
+ENV TAG=v1.0.20201102
 RUN curl -#L  https://github.com/rordenlab/dcm2niix/releases/download/$TAG/dcm2niix_lnx.zip \
     | bsdtar -xf- -C /usr/bin && chmod +x /usr/bin/dcm2nii*
 

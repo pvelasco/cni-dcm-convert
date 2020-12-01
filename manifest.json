@@ -8,14 +8,14 @@
   "source": "https://github.com/cni/cni-dcm-convert",
   "license": "Apache-2.0",
   "flywheel": "0",
-  "version": "2.5.0",
+  "version": "2.6.0",
   "custom": {
     "flywheel": {
       "suite": "Stanford CNI"
     },
     "gear-builder": {
       "category": "converter",
-      "image": "stanfordcni/cni-dcm-convert:2.5.0"
+      "image": "stanfordcni/cni-dcm-convert:2.6.0"
     }
   },
   "config": {
