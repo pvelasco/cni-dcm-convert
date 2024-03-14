@@ -4,14 +4,31 @@
   "description": "CNI-DCM-CONVERT uses SciTran's data library (https://github.com/vistalab/scitran-data) to convert raw DICOM data (within a zip archive) to NIfTI, Montage, and PNG (screenshot acquisitions) formats. DCM-CONVERT supports Siemens and GE DICOM data. This gear will also use dcm2niix to generate bids-sidecar metadata. Those metadata will be added to the output NIfTI file's info object in Flywheel.",
   "maintainer": "Michael Perry <lmperry@stanford.edu>",
   "author": "Scientific Transparency (RF Dougherty, K Hahn, R Bowen, G Schaefer, LM Perry, H Wu)",
-  "url": "https://github.com/vistalab/scitran-data",
-  "source": "https://github.com/cni/cni-dcm-convert",
+  "url": "https://github.com/cni/cni-dcm-convert",
+  "source": "https://github.com/vistalab/scitran-data",
   "license": "Apache-2.0",
   "flywheel": "0",
   "version": "2.6.0",
   "custom": {
     "flywheel": {
-      "suite": "Stanford CNI"
+      "suite": "",
+      "classification": {
+        "species": [
+          ""
+        ],
+        "organ": [
+          ""
+        ],
+        "therapeutic_area": [
+          ""
+        ],
+        "modality": [
+          ""
+        ],
+        "function": [
+          ""
+        ]
+      }
     },
     "gear-builder": {
       "category": "converter",
