@@ -11,23 +11,27 @@
   "version": "2.6.0",
   "custom": {
     "flywheel": {
-      "suite": "",
+      "suite": "Conversion",
       "classification": {
-        "species": [
-          ""
-        ],
-        "organ": [
-          ""
-        ],
-        "therapeutic_area": [
-          ""
-        ],
-        "modality": [
-          ""
-        ],
-        "function": [
-          ""
-        ]
+          "function": [
+            "Conversion"
+          ],
+          "modality": [
+            "Any"
+          ],
+          "organ": [
+            "Any"
+          ],
+          "species": [
+            "Phantom",
+            "Human",
+            "Animal",
+            "Other"
+          ],
+          "therapeutic_area": [
+            "Any"
+          ]
+        }
       }
     },
     "gear-builder": {
